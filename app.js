@@ -168,7 +168,7 @@ app.post('/iniciar_sesion', async (req, res) => {
 // --- Perfil del usuario ---
 app.get('/mi_perfil', verificar_inicio_sesion, async (req, res) => {
     try{
-        const usuario = await Usuario.findById(req.session.usuario.id).select('nombre correo foto')
+        const usuario = await Usuario.findById(req.session.usuario.id).select('_id nombre correo foto')
         res.json(usuario)
     }
     catch(error){
