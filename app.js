@@ -20,16 +20,19 @@ app.use(cors({
   ],
   credentials: true
 }));
+app.set('trust proxy', 1); // necesario en Render para que secure funcione
+
 app.use(session({
     secret: '1234',
     resave: false,
     saveUninitialized: false,
+    proxy: true, // importante en proxy (Render)
     cookie: {
-        secure: process.env.NODE_ENV === 'production', // true en Render (HTTPS)
+        secure: process.env.NODE_ENV === 'production', 
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         httpOnly: true
     }
-}))
+}));
 // Middleware para evitar que las páginas protegidas se guarden en caché
 app.use((req, res, next) => {
   res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, private");
