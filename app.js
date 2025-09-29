@@ -14,14 +14,21 @@ var app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(cors({
-  origin: 'https://front-twitter-peye.vercel.app',
+  origin: [
+    'http://localhost:5500',                 // para pruebas locales
+    'https://front-twitter-peye.vercel.app'  // tu frontend en producción
+  ],
   credentials: true
 }));
 app.use(session({
-    secret:'1234',
-    resave:false,
-    saveUninitialized:false,
-    cookie: { secure: process.env.NODE_ENV === 'production' }
+    secret: '1234',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production', // true en Render (HTTPS)
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        httpOnly: true
+    }
 }))
 // Middleware para evitar que las páginas protegidas se guarden en caché
 app.use((req, res, next) => {
